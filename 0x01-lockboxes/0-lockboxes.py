@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 """
-LockBoxes Challenge
+Method to determine if all boxes can be opened
+Using prototype: def canUnlockAll(boxes)
 """
 
 def canUnlockAll(boxes):
     """
-    Determines if all the boxes can be opened or not
-
+    Check if boxes can be unlocked
     Args:
         boxes (list): List of lists where each sublist represents keys in a box
-
     Returns:
         bool: True if all boxes can be opened, False otherwise
     """
