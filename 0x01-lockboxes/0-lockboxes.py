@@ -1,32 +1,34 @@
 #!/usr/bin/python3
 '''LockBoxes Challenge'''
 
-
 def canUnlockAll(boxes):
     '''determines if all the boxes can be opened or not
+    Args:
+        boxes (list): List of lists where each sublist represents keys in a box
     Returns:
-        True: all boxes can be opened
-        False: not all boxes can be opened
+        bool: True if all boxes can be opened, False otherwise
     '''
     length = len(boxes)
-    keys = set()
-    opened_boxes = []
-    i = 0
+    keys = set(boxes[0])  # Start with the keys in the first box
+    opened_boxes = set([0])  # First box is always opened
 
-    while i < length:
-        oldi = i
-        opened_boxes.append(i)
-        keys.update(boxes[i])
-        for key in keys:
-            if key != 0 and key < length and key not in opened_boxes:
-                i = key
-                break
-        if oldi != i:
-            continue
-        else:
-            break
+    while keys:
+        key = keys.pop()
+        if key < length and key not in opened_boxes:
+            opened_boxes.add(key)
+            keys.update(boxes[key])  # Add new keys found in the newly opened box
 
-    for i in range(length):
-        if i not in opened_boxes and i != 0:
-            return False
-    return True
+    # Check if all boxes are opened
+    return len(opened_boxes) == length
+
+# Test cases
+if __name__ == "__main__":
+    boxes = [[1], [2], [3], [4], []]
+    print(canUnlockAll(boxes))  # True
+
+    boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
+    print(canUnlockAll(boxes))  # True
+
+    boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
+    print(canUnlockAll(boxes))  # False
+
