@@ -1,29 +1,27 @@
-#!/usr/bin/python3
-'''Given a pile of coins of different values,
-    determine the fewest number of coins needed to meet
-    a given amount total.
-'''
-import sys
-
+from collections import deque
 
 def makeChange(coins, total):
-    '''
-    Return: fewest number of coins needed to meet total
-    If total is 0 or less, return 0
-    If total cannot be met by any number of coins you have, return -1
-    '''
     if total <= 0:
         return 0
-    table = [sys.maxsize for i in range(total + 1)]
-    table[0] = 0
-    m = len(coins)
-    for i in range(1, total + 1):
-        for j in range(m):
-            if coins[j] <= i:
-                subres = table[i - coins[j]]
-                if subres != sys.maxsize and subres + 1 < table[i]:
-                    table[i] = subres + 1
 
-    if table[total] == sys.maxsize:
-        return -1
-    return table[total]
+    # Sort coins to try larger coins first
+    coins.sort(reverse=True)
+    
+    queue = deque([(0, 0)])  # (current_sum, number_of_coins)
+    visited = set()  # To avoid revisiting the same sum
+
+    while queue:
+        current_sum, num_coins = queue.popleft()
+
+        for coin in coins:
+            next_sum = current_sum + coin
+
+            if next_sum == total:
+                return num_coins + 1
+            if next_sum > total:
+                continue
+            if next_sum not in visited:
+                visited.add(next_sum)
+                queue.append((next_sum, num_coins + 1))
+
+    return -1
